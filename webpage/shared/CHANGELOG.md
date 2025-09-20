@@ -4,7 +4,7 @@
 
 | 日期 | 模块/小组 | 影响范围 | 状态 | 备注 |
 | ---- | ------ | -------- | ---- | ---- |
-| 2025-09-24 | frontend-build | 任务中台 credits workflow 联调 | 已完成 | src/lib/workflows/taskLifecycle.ts、docs/realtime-push-plan.md |
+| 2025-09-24 | frontend-build | Task lifecycle credits workflow integration | Completed | src/lib/workflows/taskLifecycle.ts, docs/realtime-push-plan.md |
 | 2025-09-23 | frontend-build | 审核/举报面板对接合规枚举 | 已完成 | src/components/operations/ReviewDashboard.tsx；src/components/operations/ReportPanel.tsx；src/data/complianceMeta.ts |
 | 2025-09-22 | frontend-build | 实时推送客户端：SSE 接入 & 首批事件初始化 | 已完成 | src/lib/api/platformClient.ts；src/hooks/useRealtimeFeed.ts；shared/status-feed.md；docs/tracking-handshake-status.md |
 | 2025-09-20 | frontend-build | 首屏 Hero/Quickstart/任务中心资产替换 | 已完成 | src/components/HeroSection.tsx；src/components/QuickStartSection.tsx；src/components/TaskCenterPanel.tsx；src/components/PersonaPanel.tsx；app/globals.css；src/data/siteContent.ts |
@@ -189,7 +189,6 @@
 | 2025-09-19 | shared | 9/21 指标联调资料准备 | 已完成 | 新增 shared/metrics/artifacts/2025-09-21/verify_phase1_events.sql 与会议模板，更新 README/实施计划 |
 | 2025-09-19 | product-planning | 埋点落地计划汇总 | 已完成 | phase1-baseline.md 指标埋点章节更新；phase1-deliverables-tracker 标记已准备 |
 | 2025-09-21 | shared & 全体 | Phase1 指标联调会议（模拟） | 已完成 | 会议模板 `shared/metrics/meetings/2025-09-21-metrics-sync.md` 填写；SQL 校验脚本待数据团队执行后回填 |
-
 
 
 

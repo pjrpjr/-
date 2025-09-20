@@ -14,7 +14,7 @@
 - [x] 2025-09-21：按 `tracking-handshake-plan.md` 完成埋点扩展，覆盖 AnalyticsProvider、导航、模板、任务事件等；详情见 `docs/tracking-handshake-status.md` 与 shared/CHANGELOG.md。
 - [x] 2025-09-22：落地实时推送，SSE 替换 `subscribeTaskEvents` mock，支持重试策略与首批事件加载；详见 `src/lib/api/platformClient.ts` 与 `docs/tracking-handshake-status.md`。
 - [x] 2025-09-23：实现审核后台与举报面板 UI，接入 `operations-compliance/compliance-interface-fields-2025-09-18.md` 枚举，展示驳回原因、动作说明、积分回滚并更新 CHANGELOG。
-- [x] 2025-09-24：完成任务中台 API 联调，覆盖暂存/重试/退款流程并更新 docs/realtime-push-plan.md（taskLifecycle 工作流已落地）
+- [x] 2025-09-24: Completed task lifecycle API integration, including hold/retry/refund flows, and refreshed `docs/realtime-push-plan.md` (taskLifecycle workflow shipped)
 - [ ] 2025-09-25：联调复盘，整理前端侧验证报告（`docs/frontend-review-2025-09-25.md`），并在 CHANGELOG 记录结果。
 - [ ] 2025-09-26：与产品规划启动 Phase2 前端规划（`phase2/frontend-outline.md`），定义新模块与技术投入。
 

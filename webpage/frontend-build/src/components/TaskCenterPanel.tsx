@@ -9,6 +9,7 @@ import { useAnalytics } from "../context/AnalyticsContext";
 import { useRealtimeContext } from "../context/RealtimeContext";
 import { api } from "../lib/api";
 import type { TaskEvent } from "../lib/types";
+import { TaskLifecycleControls } from "./TaskLifecycleControls";
 
 function getStatusCopy(status: "idle" | "connecting" | "open" | "error") {
   switch (status) {
@@ -97,6 +98,7 @@ export function TaskCenterPanel() {
           </button>
         </div>
       </header>
+      <TaskLifecycleControls />
       {sortedEvents.length === 0 ? (
         <div className="empty-state">
           <h3>No live data</h3>

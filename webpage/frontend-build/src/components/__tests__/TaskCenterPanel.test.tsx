@@ -1,7 +1,6 @@
-import React from "react";
+﻿import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { TaskCenterPanel } from "../TaskCenterPanel";
 
 type MockStatus = "idle" | "connecting" | "open" | "error";
 
@@ -32,6 +31,13 @@ vi.mock("../../lib/api", () => ({
     pushTaskEvent
   }
 }));
+
+vi.mock("../TaskLifecycleControls", () => ({
+  __esModule: true,
+  TaskLifecycleControls: () => <div data-testid="task-lifecycle-controls" />
+}));
+
+const { TaskCenterPanel } = await import("../TaskCenterPanel");
 
 describe("TaskCenterPanel", () => {
   beforeEach(() => {
