@@ -1,0 +1,11 @@
+﻿<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'>
+  <rect x='6' y='10' width='36' height='28' rx='8' fill='url(#reportInvestigatingGradient)'/>
+  <defs>
+    <linearGradient id='reportInvestigatingGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+      <stop offset='0%' stop-color='#fde68a'/>
+      <stop offset='100%' stop-color='#d97706'/>
+    </linearGradient>
+  </defs>
+  <path d='M18 20h12l6 8H12z' fill='none' stroke='#92400e' stroke-width='2' stroke-linejoin='round'/>
+  <circle cx='18' cy='20' r='3' fill='#92400e'/>
+</svg>

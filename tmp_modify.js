@@ -1,0 +1,1 @@
+const fs=require('fs');\nconst path=require('path');\nconst file=path.join('webpage','frontend-build','src','lib','api','index.ts');\nlet text=fs.readFileSync(file,'utf8');\nconst hasBom=text.charCodeAt(0)===0xfeff;\nif(hasBom){text=text.slice(1);}\nconst newlineIndex=text.indexOf('\n');\nconsole.log('newlineIndex', newlineIndex);\n

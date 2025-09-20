@@ -1,0 +1,10 @@
+﻿<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'>
+  <rect x='6' y='10' width='36' height='28' rx='8' fill='url(#reportClosedGradient)'/>
+  <defs>
+    <linearGradient id='reportClosedGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+      <stop offset='0%' stop-color='#bbf7d0'/>
+      <stop offset='100%' stop-color='#10b981'/>
+    </linearGradient>
+  </defs>
+  <path d='M16 26l5 5 11-11' fill='none' stroke='#047857' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>
+</svg>

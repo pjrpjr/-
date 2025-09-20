@@ -1,0 +1,25 @@
+# Global ignore rules for Codex CLI workspace
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Pytest caches
+.pytest_cache/
+
+# Node.js / Next.js artifacts
+node_modules/
+.next/
+dist/
+*.tsbuildinfo
+
+# Logs and temp files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+githubtoken.md
+.codex/

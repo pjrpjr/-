@@ -1,0 +1,1744 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Platform Integration Mock API",
+    "description": "FastAPI 骨架，提供积分、授权、任务与审核回写的 Mock 接口供联调使用。",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/credits/estimate": {
+      "post": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "积分试算",
+        "operationId": "estimate_api_v1_credits_estimate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EstimateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstimateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/charge": {
+      "post": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "直接扣费",
+        "operationId": "charge_api_v1_credits_charge_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChargeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChargeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/ledger": {
+      "get": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "积分流水",
+        "operationId": "ledger_api_v1_credits_ledger_get",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/pre-deduct": {
+      "post": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "预扣积分",
+        "operationId": "pre_deduct_api_v1_credits_pre_deduct_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreDeductRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreDeductResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/commit": {
+      "post": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "结算扣费",
+        "operationId": "commit_api_v1_credits_commit_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommitRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreDeductResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/cancel": {
+      "post": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "取消预扣",
+        "operationId": "cancel_api_v1_credits_cancel_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Cancel Api V1 Credits Cancel Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/credits/balance": {
+      "get": {
+        "tags": [
+          "credits"
+        ],
+        "summary": "查询积分余额",
+        "operationId": "balance_api_v1_credits_balance_get",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authorizations/import": {
+      "post": {
+        "tags": [
+          "authorizations"
+        ],
+        "summary": "批量导入授权",
+        "operationId": "import_authorizations_api_v1_authorizations_import_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authorizations/revoke": {
+      "post": {
+        "tags": [
+          "authorizations"
+        ],
+        "summary": "吊销授权",
+        "operationId": "revoke_api_v1_authorizations_revoke_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authorizations/{template_id}": {
+      "get": {
+        "tags": [
+          "authorizations"
+        ],
+        "summary": "查看模板授权名单",
+        "operationId": "list_authorizations_api_v1_authorizations__template_id__get",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuthorizationRecord"
+                  },
+                  "title": "Response List Authorizations Api V1 Authorizations  Template Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authorizations/{template_id}/logs": {
+      "get": {
+        "tags": [
+          "authorizations"
+        ],
+        "summary": "查询授权使用日志",
+        "operationId": "authorization_logs_api_v1_authorizations__template_id__logs_get",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Authorization Logs Api V1 Authorizations  Template Id  Logs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "查询任务详情",
+        "operationId": "get_task_api_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/events": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "查询任务事件流",
+        "operationId": "get_task_events_api_v1_tasks__task_id__events_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskEvent"
+                  },
+                  "title": "Response Get Task Events Api V1 Tasks  Task Id  Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/stream/mock": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "返回 WebSocket/SSE 模拟配置",
+        "operationId": "task_stream_mock_api_v1_tasks_stream_mock_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Task Stream Mock Api V1 Tasks Stream Mock Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/callbacks": {
+      "post": {
+        "tags": [
+          "review-callback"
+        ],
+        "summary": "审核结果回写",
+        "operationId": "review_callback_api_v1_reviews_callbacks_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewCallbackRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewCallbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/me": {
+      "get": {
+        "tags": [
+          "sessions"
+        ],
+        "summary": "获取当前会话信息",
+        "operationId": "get_me_api_v1_sessions_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Get Me Api V1 Sessions Me Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "tags": [
+          "status"
+        ],
+        "summary": "健康检查",
+        "operationId": "health_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Health Healthz Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthorizationRecord": {
+        "properties": {
+          "authorization_id": {
+            "type": "string",
+            "title": "Authorization Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "授权状态",
+            "default": "active"
+          },
+          "usage_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit",
+            "description": "可用次数上限"
+          },
+          "used": {
+            "type": "integer",
+            "title": "Used",
+            "description": "已使用次数",
+            "default": 0
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Valid From"
+          },
+          "valid_to": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Valid To"
+          }
+        },
+        "type": "object",
+        "required": [
+          "authorization_id",
+          "template_id",
+          "user_id",
+          "tenant_id",
+          "valid_from",
+          "valid_to"
+        ],
+        "title": "AuthorizationRecord"
+      },
+      "BalanceResponse": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "balance": {
+            "type": "integer",
+            "title": "Balance"
+          },
+          "frozen": {
+            "type": "integer",
+            "title": "Frozen"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "point"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "balance",
+          "frozen"
+        ],
+        "title": "BalanceResponse"
+      },
+      "CancelRequest": {
+        "properties": {
+          "pre_deduct_id": {
+            "type": "string",
+            "title": "Pre Deduct Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "取消原因"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pre_deduct_id",
+          "tenant_id",
+          "reason"
+        ],
+        "title": "CancelRequest"
+      },
+      "ChargeRequest": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id",
+            "description": "关联任务 ID，可为空"
+          },
+          "amount": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "直接扣费积分"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority",
+            "description": "扣费对应的优先级模式",
+            "default": "standard"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "扣费原因标签",
+            "default": "charge"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "user_id",
+          "template_id",
+          "amount"
+        ],
+        "title": "ChargeRequest"
+      },
+      "ChargeResponse": {
+        "properties": {
+          "ledger_id": {
+            "type": "string",
+            "title": "Ledger Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          },
+          "balance_after": {
+            "type": "integer",
+            "title": "Balance After"
+          },
+          "change": {
+            "type": "integer",
+            "title": "Change"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ledger_id",
+          "tenant_id",
+          "user_id",
+          "task_id",
+          "balance_after",
+          "change",
+          "reason",
+          "created_at"
+        ],
+        "title": "ChargeResponse"
+      },
+      "CommitRequest": {
+        "properties": {
+          "pre_deduct_id": {
+            "type": "string",
+            "title": "Pre Deduct Id"
+          },
+          "actual_cost": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Actual Cost"
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pre_deduct_id",
+          "actual_cost",
+          "task_id",
+          "tenant_id",
+          "template_id",
+          "user_id"
+        ],
+        "title": "CommitRequest"
+      },
+      "EstimateOption": {
+        "properties": {
+          "priority": {
+            "type": "string",
+            "title": "Priority"
+          },
+          "total_cost": {
+            "type": "integer",
+            "title": "Total Cost"
+          },
+          "eta_minutes": {
+            "type": "integer",
+            "title": "Eta Minutes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "priority",
+          "total_cost",
+          "eta_minutes"
+        ],
+        "title": "EstimateOption"
+      },
+      "EstimateRequest": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "scene": {
+            "type": "string",
+            "title": "Scene"
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution",
+            "description": "分辨率标识：sd/hd/4k",
+            "default": "hd"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority",
+            "description": "standard/accelerated",
+            "default": "standard"
+          },
+          "extras": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extras",
+            "description": "附加消耗，如超分/高清等"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "user_id",
+          "template_id",
+          "scene"
+        ],
+        "title": "EstimateRequest"
+      },
+      "EstimateResponse": {
+        "properties": {
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "scene": {
+            "type": "string",
+            "title": "Scene"
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority"
+          },
+          "current_balance": {
+            "type": "integer",
+            "title": "Current Balance"
+          },
+          "selected_cost": {
+            "type": "integer",
+            "title": "Selected Cost"
+          },
+          "suggest_topup": {
+            "type": "integer",
+            "title": "Suggest Topup"
+          },
+          "extras": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Extras"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/EstimateOption"
+            },
+            "type": "array",
+            "title": "Options"
+          }
+        },
+        "type": "object",
+        "required": [
+          "currency",
+          "template_id",
+          "scene",
+          "resolution",
+          "priority",
+          "current_balance",
+          "selected_cost",
+          "suggest_topup",
+          "extras",
+          "options"
+        ],
+        "title": "EstimateResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImportRequest": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "entries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Entries",
+            "description": "授权用户 ID 列表"
+          },
+          "usage_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit",
+            "description": "次数限制"
+          },
+          "valid_days": {
+            "type": "integer",
+            "maximum": 365.0,
+            "minimum": 1.0,
+            "title": "Valid Days",
+            "default": 30
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "template_id",
+          "entries"
+        ],
+        "title": "ImportRequest"
+      },
+      "ImportResponse": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "created": {
+            "type": "integer",
+            "title": "Created"
+          },
+          "skipped": {
+            "type": "integer",
+            "title": "Skipped"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "template_id",
+          "total",
+          "created",
+          "skipped",
+          "batch_id"
+        ],
+        "title": "ImportResponse"
+      },
+      "LedgerEntryResponse": {
+        "properties": {
+          "ledger_id": {
+            "type": "string",
+            "title": "Ledger Id"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          },
+          "change": {
+            "type": "integer",
+            "title": "Change"
+          },
+          "balance_after": {
+            "type": "integer",
+            "title": "Balance After"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ledger_id",
+          "task_id",
+          "change",
+          "balance_after",
+          "reason",
+          "created_at"
+        ],
+        "title": "LedgerEntryResponse"
+      },
+      "LedgerResponse": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/LedgerEntryResponse"
+            },
+            "type": "array",
+            "title": "Entries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "user_id",
+          "entries"
+        ],
+        "title": "LedgerResponse"
+      },
+      "PreDeductRequest": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id",
+            "description": "任务唯一 ID"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id",
+            "description": "模板 ID"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id",
+            "description": "创作者/租户 ID"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "description": "授权用户 ID"
+          },
+          "scene": {
+            "type": "string",
+            "title": "Scene",
+            "description": "任务场景标识"
+          },
+          "estimated_cost": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Estimated Cost",
+            "description": "预估积分消耗"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "积分计价单位",
+            "default": "point"
+          },
+          "expire_in": {
+            "type": "integer",
+            "maximum": 3600.0,
+            "minimum": 60.0,
+            "title": "Expire In",
+            "description": "预扣单过期秒数",
+            "default": 600
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "template_id",
+          "tenant_id",
+          "user_id",
+          "scene",
+          "estimated_cost"
+        ],
+        "title": "PreDeductRequest"
+      },
+      "PreDeductResponse": {
+        "properties": {
+          "pre_deduct_id": {
+            "type": "string",
+            "title": "Pre Deduct Id"
+          },
+          "frozen_amount": {
+            "type": "integer",
+            "title": "Frozen Amount"
+          },
+          "balance_after": {
+            "type": "integer",
+            "title": "Balance After"
+          },
+          "quota_snapshot": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Quota Snapshot"
+          },
+          "expire_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expire At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pre_deduct_id",
+          "frozen_amount",
+          "balance_after",
+          "quota_snapshot",
+          "expire_at"
+        ],
+        "title": "PreDeductResponse"
+      },
+      "ReviewCallbackRequest": {
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "title": "Review Id",
+            "description": "审核单 ID"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id",
+            "description": "模板 ID"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id",
+            "description": "创作者/租户 ID"
+          },
+          "operator": {
+            "type": "string",
+            "title": "Operator",
+            "description": "审核人账号"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision",
+            "description": "pass/reject 等结论"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason",
+            "description": "审核原因备注"
+          },
+          "effective_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Effective At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "review_id",
+          "template_id",
+          "tenant_id",
+          "operator",
+          "decision"
+        ],
+        "title": "ReviewCallbackRequest"
+      },
+      "ReviewCallbackResponse": {
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "title": "Review Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "processed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Processed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "review_id",
+          "status",
+          "processed_at"
+        ],
+        "title": "ReviewCallbackResponse"
+      },
+      "RevokeRequest": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "user_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "User Ids"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "template_id",
+          "user_ids",
+          "reason"
+        ],
+        "title": "RevokeRequest"
+      },
+      "RevokeResponse": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "revoked": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Revoked"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "processed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Processed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "template_id",
+          "revoked",
+          "reason",
+          "processed_at"
+        ],
+        "title": "RevokeResponse"
+      },
+      "TaskEvent": {
+        "properties": {
+          "event": {
+            "type": "string",
+            "title": "Event"
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "credits_delta": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Credits Delta"
+          },
+          "ts": {
+            "type": "string",
+            "title": "Ts"
+          },
+          "stage": {
+            "type": "string",
+            "title": "Stage"
+          },
+          "progress": {
+            "type": "integer",
+            "title": "Progress"
+          },
+          "next_eta": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Eta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event",
+          "task_id",
+          "status",
+          "ts",
+          "stage",
+          "progress"
+        ],
+        "title": "TaskEvent"
+      },
+      "TaskResponse": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "result_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Url"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "status",
+          "template_id",
+          "tenant_id",
+          "user_id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TaskResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
