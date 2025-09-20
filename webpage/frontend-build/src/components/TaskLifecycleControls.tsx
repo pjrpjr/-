@@ -3,8 +3,9 @@
 import React from "react";
 void React;
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTaskLifecycle } from "../hooks/useTaskLifecycle";
+import { useAnalytics } from "../context/AnalyticsContext";
 import type { TaskLifecycleContext } from "../lib/workflows/taskLifecycle";
 
 const DEFAULT_CONTEXT: TaskLifecycleContext = {
@@ -29,6 +30,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
 
 export function TaskLifecycleControls() {
   const lifecycle = useTaskLifecycle(DEFAULT_CONTEXT);
+  const { trackEvent } = useAnalytics();
   const { state } = lifecycle;
   const [actualCost, setActualCost] = useState<number>(120);
 
@@ -40,6 +42,130 @@ export function TaskLifecycleControls() {
 
   const canCommit = useMemo(() => Boolean(state.currentHold), [state.currentHold]);
   const canCancel = useMemo(() => Boolean(state.currentHold), [state.currentHold]);
+
+  const handleHold = useCallback(async () => {
+    trackEvent({
+      name: "task_lifecycle_action",
+      id: "task_lifecycle_hold_invoke",
+      data: { action: "hold", cost: actualCost }
+    });
+    try {
+      const snapshot = await lifecycle.hold({ estimatedCost: actualCost });
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_hold_success",
+        data: {
+          action: "hold",
+          status: "success",
+          pre_deduct_id: snapshot.preDeductId,
+          frozen_amount: snapshot.frozenAmount
+        }
+      });
+      return snapshot;
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_hold_failure",
+        data: { action: "hold", status: "failure", message }
+      });
+      throw error;
+    }
+  }, [actualCost, lifecycle, trackEvent]);
+
+  const handleCommit = useCallback(async () => {
+    const preDeductId = state.currentHold?.preDeductId ?? null;
+    trackEvent({
+      name: "task_lifecycle_action",
+      id: "task_lifecycle_commit_invoke",
+      data: { action: "commit", cost: actualCost, pre_deduct_id: preDeductId }
+    });
+    try {
+      const result = await lifecycle.commit({ actualCost });
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_commit_success",
+        data: {
+          action: "commit",
+          status: "success",
+          refund_amount: result.refundAmount,
+          pre_deduct_id: result.receipt.preDeductId
+        }
+      });
+      return result;
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_commit_failure",
+        data: { action: "commit", status: "failure", message }
+      });
+      throw error;
+    }
+  }, [actualCost, lifecycle, state.currentHold, trackEvent]);
+
+  const handleCancel = useCallback(async () => {
+    const preDeductId = state.currentHold?.preDeductId ?? null;
+    trackEvent({
+      name: "task_lifecycle_action",
+      id: "task_lifecycle_cancel_invoke",
+      data: { action: "cancel", pre_deduct_id: preDeductId }
+    });
+    try {
+      const result = await lifecycle.cancel(preDeductId ? { preDeductId } : {});
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_cancel_success",
+        data: {
+          action: "cancel",
+          status: "success",
+          pre_deduct_id: result.preDeductId,
+          cancel_status: result.status ?? null
+        }
+      });
+      return result;
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_cancel_failure",
+        data: { action: "cancel", status: "failure", message }
+      });
+      throw error;
+    }
+  }, [lifecycle, state.currentHold, trackEvent]);
+
+  const handleRetry = useCallback(async () => {
+    const previousHoldId = state.currentHold?.preDeductId ?? null;
+    trackEvent({
+      name: "task_lifecycle_action",
+      id: "task_lifecycle_retry_invoke",
+      data: { action: "retry", cost: actualCost, previous_hold_id: previousHoldId }
+    });
+    try {
+      const result = await lifecycle.retry({ estimatedCost: actualCost });
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_retry_success",
+        data: {
+          action: "retry",
+          status: "success",
+          new_hold_id: result.hold.preDeductId,
+          cancellation_status: result.cancellation?.status ?? null,
+          cancel_error: result.cancelError?.message ?? null
+        }
+      });
+      return result;
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      trackEvent({
+        name: "task_lifecycle_action_result",
+        id: "task_lifecycle_retry_failure",
+        data: { action: "retry", status: "failure", message }
+      });
+      throw error;
+    }
+  }, [actualCost, lifecycle, state.currentHold, trackEvent]);
 
   const loadingText = useMemo(() => {
     switch (state.status) {
@@ -56,6 +182,7 @@ export function TaskLifecycleControls() {
     }
   }, [state.status]);
 
+
   return (
     <section className="task-lifecycle" aria-labelledby="task-lifecycle-heading">
       <header className="task-lifecycle__header">
@@ -68,28 +195,28 @@ export function TaskLifecycleControls() {
       <div className="task-lifecycle__actions">
         <button
           type="button"
-          onClick={() => lifecycle.hold({ estimatedCost: actualCost })}
+          onClick={() => { void handleHold(); }}
           disabled={state.status !== "idle"}
         >
           Hold credits
         </button>
         <button
           type="button"
-          onClick={() => lifecycle.commit({ actualCost })}
+          onClick={() => { void handleCommit(); }}
           disabled={!canCommit || state.status !== "idle"}
         >
           Commit hold
         </button>
         <button
           type="button"
-          onClick={() => lifecycle.cancel()}
+          onClick={() => { void handleCancel(); }}
           disabled={!canCancel || state.status !== "idle"}
         >
           Cancel hold
         </button>
         <button
           type="button"
-          onClick={() => lifecycle.retry({ estimatedCost: actualCost })}
+          onClick={() => { void handleRetry(); }}
           disabled={state.status !== "idle"}
         >
           Retry hold

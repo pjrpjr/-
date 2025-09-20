@@ -7,7 +7,9 @@
 ## Recent Progress
 - Hero, monetization, template grid, compliance notice, quick start CTA, analytics coverage, SSE push, and moderation UI are complete per TODO checklist.
 - `docs/platform-api-integration-plan.md` and `shared/CHANGELOG.md` already capture the 2025-09-23 updates.
+- Drafted `docs/frontend-review-2025-09-25.md` as the preview report for upcoming verification.
 - Task lifecycle workflows wired to credits API (`src/lib/workflows/taskLifecycle.ts`) with Vitest coverage for hold/retry/refund paths.
+- Lifecycle controls now emit analytics events for hold/commit/cancel/retry actions.
 
 ## Pending Blockers
 - Await backend confirmation for refund/retry flows before replacing mocks in `src/lib/api/platformClient.ts`.
