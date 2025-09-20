@@ -79,6 +79,33 @@ def run_git(repo_root: Path, *args, check: bool = True, env=None):
     return result
 
 
+def get_remote(repo_root: Path, remote_name: str):
+    result = run_git(repo_root, "remote", "get-url", remote_name, check=False)
+    if result.returncode == 0:
+        return result.stdout.strip()
+    return None
+
+
+def configure_remote(repo_root: Path, remote_name: str, remote_url: str):
+    existing = get_remote(repo_root, remote_name)
+    if existing:
+        return existing
+    run_git(repo_root, "remote", "add", remote_name, remote_url)
+    return remote_url
+
+
+def sanitize_remote_path(url: str) -> str:
+    trimmed = url
+    if trimmed.endswith(".git"):
+        trimmed = trimmed[:-4]
+    key = "github.com/"
+    if key in trimmed:
+        trimmed = trimmed.split(key, 1)[1]
+    if "@" in trimmed and not trimmed.startswith("github.com/"):
+        trimmed = trimmed.split("@", 1)[-1]
+    return trimmed
+
+
 def stage_and_commit(repo_root: Path):
     run_git(repo_root, "add", "-A")
     status = run_git(repo_root, "status", "--porcelain", check=False)
@@ -88,14 +115,6 @@ def stage_and_commit(repo_root: Path):
     message = f"Auto snapshot {timestamp}"
     run_git(repo_root, "commit", "-m", message)
     return message
-
-
-def configure_remote(repo_root: Path, remote_name: str, remote_url: str):
-    current = run_git(repo_root, "remote", "get-url", remote_name, check=False)
-    if current.returncode == 0:
-        return current.stdout.strip()
-    run_git(repo_root, "remote", "add", remote_name, remote_url)
-    return remote_url
 
 
 def push(repo_root: Path, remote_name: str, token: str):
@@ -152,9 +171,16 @@ def main():
     if not token:
         raise SystemExit("Token file is empty; cannot continue")
 
-    login, clone_url = ensure_repo(token, args.repo_name)
-    remote_url = clone_url.replace("https://", f"https://{login}@")
-    configure_remote(repo_root, args.remote_name, remote_url)
+    remote_url = get_remote(repo_root, args.remote_name)
+    display_path = None
+
+    if not remote_url:
+        login, clone_url = ensure_repo(token, args.repo_name)
+        remote_url = clone_url.replace("https://", f"https://{login}@")
+        configure_remote(repo_root, args.remote_name, remote_url)
+        display_path = sanitize_remote_path(clone_url)
+    else:
+        display_path = sanitize_remote_path(remote_url)
 
     commit_message = stage_and_commit(repo_root)
     if commit_message is None:
@@ -163,7 +189,7 @@ def main():
 
     push(repo_root, args.remote_name, token)
     print(f"Pushed latest commit: {commit_message}")
-    print(f"Repository URL: https://github.com/{login}/{args.repo_name}")
+    print(f"Repository URL: https://github.com/{display_path}")
 
 
 if __name__ == "__main__":
