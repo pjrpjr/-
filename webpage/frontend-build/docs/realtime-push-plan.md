@@ -43,4 +43,7 @@
 - 如果事件字段与 TODO 中所列不一致，需要在第一时间回写需求。
 - SSE 与 WebSocket 同时提供？需确认 Service Worker 与 SSR 场景兼容性。
 - 若后端事件量大，需要考虑分页/列表剪裁策略。
-
+## 2025-09-24 前端联调进展
+- 新增 src/lib/workflows/taskLifecycle.ts 封装预扣、结算、取消/重试等流程，统一调用 credits API。
+- 	askLifecycle.test.ts 使用 Vitest 覆盖暂存、重试、退款差额场景，保障重连与错误容忍逻辑。
+- SSE 端暂继续沿用 platformClient 重试策略；后续可接入实时任务 ID 配置。
